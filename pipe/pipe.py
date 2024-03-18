@@ -313,9 +313,7 @@ class ChatGPTCodereviewPipe(Pipe):
         self.log_info(f'Commented files count {len(files_with_comments)}: {files_with_comments}')
 
         ui_pull_request_url = f"https://bitbucket.org/{self.workspace}/{self.repo_slug}/pull-requests/{pull_request_id}"
-        self.log_info(f"Added comments provided by ChatGPT to the pull request: {ui_pull_request_url}")
-
-        self.success(message="Success!")
+        self.success(message=f"Successfully added the comments provided by ChatGPT to the pull request: {ui_pull_request_url}")
 
 
 if __name__ == '__main__':

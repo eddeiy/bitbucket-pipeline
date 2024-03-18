@@ -30,7 +30,7 @@ Add the following snippet to the script section of your `bitbucket-pipelines.yml
 | OPENAI_API_KEY (*)           | OPENAI api key to access ChatGPT.                                                                                                                                                                             |
 | BITBUCKET_ACCESS_TOKEN (*)   | The [access token][Bitbucket Access Token] will be used for authentication. Repositories write and Repositories read and PullRequest read.                                                                    |
 | MODEL (*)                    | ID of the model to use. See the model endpoint compatibility table for details on which [models work with the Chat API in JSON mode][JSON models]. Supported: `gpt-4-turbo-preview` and `gpt-3.5-turbo-0125`. |
-| ORGANIZATION                 | Organization ID. Can be found on your Organization settings page.                                                                                                                                             |
+| ORGANIZATION                 | Organization ID. Can be found on your [Organization settings][Organization settings] page in OpenAI UI.                                                                                                       |
 | MESSAGE                      | Content of the message object to extend system [prompt][prompt]. If provided, users MESSAGE will extend default pipe’s messages.                                                                              |
 | FILES_TO_REVIEW              | List of files for review comma-separated. Default: pipe will review all diffs files from the pull-request.                                                                                                    |
 | CHATGPT_COMPLETION_FILEPATH  | Path to JSON file containing [completion parameters][Completion parameters].                                                                                                                                  |
@@ -50,7 +50,7 @@ Bitbucket pipelines with [pull-request start conditions][bitbucket pull-request 
 Limitations of the AI's models:
 
 - ChatGPT, like any AI model has limitations. It doesn't understand code or context in the same way a human does. It generates responses based on patterns it learned during training and may not always provide accurate or optimal solutions.
-- Data Privacy: When using OpenAI's API, the data you send for processing might be used to improve their models. Always refer to [OpenAI's data usage policy][[OpenAI ChatGPT]] for the most accurate information.
+- Data Privacy: When using OpenAI's API, the data you send for processing might be used to improve their models. Always refer to [OpenAI's data usage policy][OpenAI ChatGPT] for the most accurate information.
 - Recommendations by ChatGPT: The recommendations or suggestions provided by ChatGPT should be reviewed carefully. It's crucial to verify the correctness and appropriateness of the code before using it in production.
 - Configuration: Provided configuration of completion (max_token, etc.) might cut the response text of the answer.
 - Remember, AI is a tool to assist you, not a replacement for human expertise. Always review the output from AI models carefully.
@@ -169,6 +169,7 @@ Apache 2.0 licensed, see [LICENSE](LICENSE.txt) file.
 
 [Bitbucket Access Token]: https://support.atlassian.com/bitbucket-cloud/docs/access-tokens/
 [OpenAI ChatGPT]: https://openai.com/blog/chatgpt
+[Organization settings]: https://platform.openai.com/account/organization
 [JSON models]: https://platform.openai.com/docs/guides/text-generation/json-mode
 [prompt]: https://platform.openai.com/docs/guides/prompt-engineering
 [Completion parameters]: https://platform.openai.com/docs/api-reference/chat/create

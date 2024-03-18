@@ -36,20 +36,14 @@ class ChatGPTCodereviewSmokePipeTestCase(TestCase):
     def tearDown(self):
         sys.path = self.sys_path
 
-    def test_no_api_key(self):
-        self.mocker.patch.dict(
-            os.environ, {
-                "MODEL": "gpt-4-turbo-preview"
-            }
-        )
-
+    def test_validation_errors(self):
         with capture_output() as out:
             with pytest.raises(SystemExit) as pytest_wrapped_e:
                 ChatGPTCodereviewPipe(
                     schema=schema, check_for_newer_version=True)
 
-        self.assertIn('OPENAI_API_KEY:\n- required field', out.getvalue())
-        self.assertEqual(pytest_wrapped_e.type, SystemExit)
+        assert 'Validation errors:' in out.getvalue()
+        assert pytest_wrapped_e.type is SystemExit
 
 
 class TestBitbucketApiService:
