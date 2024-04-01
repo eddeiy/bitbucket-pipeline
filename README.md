@@ -167,6 +167,13 @@ Copyright (c) 2024 Atlassian and others.
 Apache 2.0 licensed, see [LICENSE](LICENSE.txt) file.
 
 
+## Third-party licenses
+[OpenAI Python API library][OpenAI Python API library]
+Copyright (c) 2024 OpenAI
+Apache 2.0 licensed, see [LICENSE-openai](LICENSE-openai.txt) file.
+
+
+
 [Bitbucket Access Token]: https://support.atlassian.com/bitbucket-cloud/docs/access-tokens/
 [OpenAI ChatGPT]: https://openai.com/blog/chatgpt
 [Organization settings]: https://platform.openai.com/account/organization
@@ -176,3 +183,4 @@ Apache 2.0 licensed, see [LICENSE](LICENSE.txt) file.
 [ChatGPT client parameters]: https://github.com/openai/openai-python/blob/e41abf7b7dbc1e744d167f748e55d4dedfc0dca7/src/openai/_client.py#L73
 [bitbucket pull-request start conditions]: https://support.atlassian.com/bitbucket-cloud/docs/pipeline-start-conditions/#Pull-Requests
 [BITBUCKET_PR_ID variable]: https://support.atlassian.com/bitbucket-cloud/docs/variables-and-secrets/
+[OpenAI Python API library]: https://pypi.org/project/openai/
