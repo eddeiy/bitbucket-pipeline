@@ -8,7 +8,7 @@ Unlock AI's power of [OpenAI ChatGPT][OpenAI ChatGPT] for code review pull reque
 Add the following snippet to the script section of your `bitbucket-pipelines.yml` file:
 
 ```yaml
-- pipe: atlassian/bitbucket-chatgpt-codereview:0.0.0
+- pipe: atlassian/bitbucket-chatgpt-codereview:0.1.0
   variables:
     OPENAI_API_KEY: "<string>"
     BITBUCKET_ACCESS_TOKEN: "<string>"
