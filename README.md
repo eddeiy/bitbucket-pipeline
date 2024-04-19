@@ -152,7 +152,8 @@ pipelines:
 
 
 ## Support
-If you’d like help with this pipe, or you have an issue or feature request, let us know.
+If you’d like help with this pipe, or you have an issue or feature request, [let us know on Community][community].
+
 The pipe is maintained by Atlassian.
 
 If you’re reporting an issue, please include:
@@ -174,6 +175,7 @@ Apache 2.0 licensed, see [LICENSE-openai](LICENSE-openai.txt) file.
 
 
 
+[community]: https://community.atlassian.com/t5/forums/postpage/board-id/bitbucket-questions?add-tags=bitbucket-pipelines,pipes,ai,chatgpt,code-quality
 [Bitbucket Access Token]: https://support.atlassian.com/bitbucket-cloud/docs/access-tokens/
 [OpenAI ChatGPT]: https://openai.com/blog/chatgpt
 [Organization settings]: https://platform.openai.com/account/organization

@@ -63,14 +63,14 @@ push: &push
 
 review: &review
   step:
-    name: Build for any pull request created
+    name: Review pull request with OpenAI ChatGPT
     script:
-      - pipe: docker://docker-public.packages.atlassian.com/bitbucketpipelines/bitbucket-chatgpt-codereview:0.0.0.6-dev
+      # Build for any pull request created
+      - pipe: atlassian/bitbucket-chatgpt-codereview:0.1.0
         variables:
           OPENAI_API_KEY: $OPENAI_API_KEY
           BITBUCKET_ACCESS_TOKEN: $BITBUCKET_ACCESS_TOKEN
           MODEL: 'gpt-4-turbo-preview'
-          BITBUCKET_PR_ID: $BITBUCKET_PR_ID
           CHATGPT_PROMPT_MAX_TOKENS: $CHATGPT_PROMPT_MAX_TOKENS
 
 
