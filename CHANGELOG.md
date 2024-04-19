@@ -1,6 +1,11 @@
 # Changelog
 Note: version releases in the 0.x.y range may introduce breaking changes.
 
+## 0.1.1
+
+- patch: Fix a link to the Atlassian community.
+- patch: Internal maintenance: Add bitbucket-chatgpt-codereview pipe to the review step.
+
 ## 0.1.0
 
 - minor: Initial release
