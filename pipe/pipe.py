@@ -317,5 +317,7 @@ class ChatGPTCodereviewPipe(Pipe):
 
 
 if __name__ == '__main__':
-    pipe = ChatGPTCodereviewPipe(schema=schema, pipe_metadata_file='pipe.yml', check_for_newer_version=True)
+    with open('/pipe.yml') as f:
+        metadata = yaml.safe_load(f.read())
+    pipe = ChatGPTCodereviewPipe(schema=schema, pipe_metadata=metadata, check_for_newer_version=True)
     pipe.run()
