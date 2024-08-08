@@ -1,6 +1,10 @@
 # Changelog
 Note: version releases in the 0.x.y range may introduce breaking changes.
 
+## 0.1.3
+
+- patch: Internal maintenance: Bump release pipe version. Add multi-platform build: linux/arm64 and linux/amd64.
+
 ## 0.1.2
 
 - patch: Fix pipe.yml metadata processing.

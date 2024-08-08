@@ -1,4 +1,0 @@
-{
-  "type": "patch",
-  "description": "Internal maintenance: Bump release pipe version. Add multi-platform build: linux/arm64 and linux/amd64."
-}
