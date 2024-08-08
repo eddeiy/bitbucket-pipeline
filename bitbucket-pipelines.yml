@@ -34,12 +34,13 @@ release-dev: &release-dev
       - set -ex
       - pip install semversioner
       - VERSION=$(semversioner current-version).${BITBUCKET_BUILD_NUMBER}-dev
-      - pipe: atlassian/bitbucket-pipe-release:5.6.0
+      - pipe: atlassian/bitbucket-pipe-release:5.7.0
         variables:
           REGISTRY_USERNAME: $REGISTRY_USERNAME
           REGISTRY_PASSWORD: $REGISTRY_PASSWORD
           IMAGE: docker-public.packages.atlassian.com/bitbucketpipelines/$BITBUCKET_REPO_SLUG
           REGISTRY_URL: docker-public.packages.atlassian.com
+          DOCKER_BUILD_PLATFORMS: "linux/arm64,linux/amd64"
           GIT_PUSH: 'false'
           VERSION: ${VERSION}
     services:
@@ -51,11 +52,12 @@ push: &push
     name: Push and Tag
     image: python:3.10
     script:
-      - pipe: atlassian/bitbucket-pipe-release:5.6.0
+      - pipe: atlassian/bitbucket-pipe-release:5.7.0
         variables:
           REGISTRY_USERNAME: $REGISTRY_USERNAME
           REGISTRY_PASSWORD: $REGISTRY_PASSWORD
           IMAGE: docker-public.packages.atlassian.com/bitbucketpipelines/$BITBUCKET_REPO_SLUG
+          DOCKER_BUILD_PLATFORMS: "linux/arm64,linux/amd64"
           REGISTRY_URL: docker-public.packages.atlassian.com
     services:
       - docker
