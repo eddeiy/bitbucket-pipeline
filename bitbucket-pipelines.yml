@@ -72,7 +72,7 @@ review: &review
         variables:
           OPENAI_API_KEY: $OPENAI_API_KEY
           BITBUCKET_ACCESS_TOKEN: $BITBUCKET_ACCESS_TOKEN
-          MODEL: 'o1'
+          MODEL: 'gpt-4o'
           CHATGPT_PROMPT_MAX_TOKENS: $CHATGPT_PROMPT_MAX_TOKENS
 
 
