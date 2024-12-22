@@ -19,7 +19,7 @@ logger = get_logger()
 schema = {
     'OPENAI_API_KEY': {'type': 'string', 'required': True},
     'BITBUCKET_ACCESS_TOKEN': {'type': 'string', 'required': True},
-    'MODEL': {'type': 'string', 'required': True, 'allowed': ['gpt-4-turbo-preview', 'gpt-3.5-turbo-0125']},
+    'MODEL': {'type': 'string', 'required': True, 'allowed': ['o1', 'gpt-4o-mini', 'gpt-4o', 'gpt-4-turbo-preview', 'gpt-3.5-turbo-0125']},
     'ORGANIZATION': {'type': 'string', 'required': False},
     'MESSAGE': {'type': 'string', 'required': False},
     'FILES_TO_REVIEW': {'type': 'string', 'required': False},

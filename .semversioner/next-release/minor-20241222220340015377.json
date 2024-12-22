@@ -1,0 +1,4 @@
+{
+  "type": "minor",
+  "description": "Add support for new OpenAI's ChatGPT models: o1, gpt-4o-mini, gpt-4o."
+}
