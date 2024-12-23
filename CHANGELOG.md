@@ -1,6 +1,10 @@
 # Changelog
 Note: version releases in the 0.x.y range may introduce breaking changes.
 
+## 0.2.0
+
+- minor: Add support for new OpenAI's ChatGPT models: o1, gpt-4o-mini, gpt-4o.
+
 ## 0.1.3
 
 - patch: Internal maintenance: Bump release pipe version. Add multi-platform build: linux/arm64 and linux/amd64.

@@ -1,5 +1,5 @@
 name: Bitbucket ChatGPT codereview
-image: bitbucketpipelines/bitbucket-chatgpt-codereview:0.1.3
+image: bitbucketpipelines/bitbucket-chatgpt-codereview:0.2.0
 description: "Unlock AI's power of ChatGPT for code review of pull requests."
 category: "Code quality"
 variables:

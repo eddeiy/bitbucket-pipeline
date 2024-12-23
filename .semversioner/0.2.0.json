@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "description": "Add support for new OpenAI's ChatGPT models: o1, gpt-4o-mini, gpt-4o.",
+      "type": "minor"
+    }
+  ],
+  "created_at": "2024-12-23T07:48:54+00:00",
+  "version": "0.2.0"
+}
