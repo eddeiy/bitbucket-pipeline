@@ -7,7 +7,14 @@ from unittest import TestCase
 
 import pytest
 
-from pipe.pipe import BitbucketApiService, ChatGPTApiService, ChatGPTCodereviewPipe, schema
+from pipe.pipe import (
+    BitbucketApiService,
+    ChatGPTApiService,
+    ChatGPTCodereviewPipe,
+    schema,
+    STRUCTURED_OUTPUT_SCHEMA,
+)
+from pipe.pipe import UnsupportedModelError
 
 
 @contextmanager
@@ -100,3 +107,50 @@ class TestChatGPTApiService:
         result = service.fetch_json('{"test": "value"}')
 
         assert result == {"test": "value"}
+
+    def test_o1_models_blocked(self, service):
+        with pytest.raises(UnsupportedModelError):
+            service.create_completion(
+                model='o1-mini',
+                messages=[{"role": "user", "content": "test"}]
+            )
+
+    def test_structured_outputs_used_when_supported(self, service, mocker):
+        mock_create = mocker.Mock()
+        mock_create.return_value = mocker.Mock()
+        service.client = mocker.Mock()
+        service.client.chat = mocker.Mock()
+        service.client.chat.completions = mocker.Mock()
+        service.client.chat.completions.create = mock_create
+
+        service.create_completion(
+            model='gpt-4o-mini-2024-07-18',
+            messages=[{"role": "user", "content": "diffs"}]
+        )
+
+        assert mock_create.called
+        _, kwargs = mock_create.call_args
+        assert kwargs["model"].startswith('gpt-4o-mini')
+        assert kwargs["response_format"]["type"] == "json_schema"
+        assert kwargs["response_format"]["json_schema"] == STRUCTURED_OUTPUT_SCHEMA["schema"]
+        assert kwargs["response_format"]["strict"] is True
+
+        # Ensure messages are passed through
+        assert isinstance(kwargs["messages"], list)
+
+    def test_legacy_json_mode_fallback(self, service, mocker):
+        mock_create = mocker.Mock()
+        mock_create.return_value = mocker.Mock()
+        service.client = mocker.Mock()
+        service.client.chat = mocker.Mock()
+        service.client.chat.completions = mocker.Mock()
+        service.client.chat.completions.create = mock_create
+
+        service.create_completion(
+            model='gpt-3.5-turbo-0125',
+            messages=[{"role": "user", "content": "diffs"}]
+        )
+
+        assert mock_create.called
+        _, kwargs = mock_create.call_args
+        assert kwargs["response_format"]["type"] == "json_object"

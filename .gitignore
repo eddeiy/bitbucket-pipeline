@@ -26,3 +26,7 @@ identity
 .aws/
 .gcp/
 .kube/
+
+/myenv
+/myenv311
+/test/myenv

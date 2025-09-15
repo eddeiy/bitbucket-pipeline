@@ -19,7 +19,7 @@ logger = get_logger()
 schema = {
     'OPENAI_API_KEY': {'type': 'string', 'required': True},
     'BITBUCKET_ACCESS_TOKEN': {'type': 'string', 'required': True},
-    'MODEL': {'type': 'string', 'required': True, 'allowed': ['o1', 'gpt-4o-mini', 'gpt-4o', 'gpt-4-turbo-preview', 'gpt-3.5-turbo-0125']},
+    'MODEL': {'type': 'string', 'required': True, 'allowed': ['o1', 'gpt-4o-mini', 'gpt-4o', 'gpt-4.1', 'gpt-4.1-mini', 'gpt-5', 'gpt-4-turbo-preview', 'gpt-3.5-turbo-0125']},
     'ORGANIZATION': {'type': 'string', 'required': False},
     'MESSAGE': {'type': 'string', 'required': False},
     'FILES_TO_REVIEW': {'type': 'string', 'required': False},
@@ -31,11 +31,28 @@ schema = {
 
 
 DEFAULT_SYSTEM_PROMPT_FOR_CODE_REVIEW = '''
-"Review a file of source code, and the git diff of a set of changes made to that file on a Pull Request. Follow a software development principles: SOLID, DRY, KISS, YAGNI. Skip compliments."
-"You are a helpful assistant designed to output JSON."
-"The response must be a JSON object where the key for each piece of feedback is the filename and line number in the file where the feedback must be left, and the value is the feedback itself as a string. "
-"JSON must follow the next structure {“{filename:line-number}“: “{feedback relating to the referenced line in the file.}“}"
+Review source code diffs for a pull request.
+Follow SOLID, DRY, KISS, YAGNI. Be direct—no compliments.
+Return ONLY a JSON object that maps "{filename}:{line}" -> "{feedback}".
+Do not include any text outside of the JSON object.
 '''
+
+
+STRUCTURED_OUTPUT_SCHEMA = {
+    "name": "CodeReviewComments",
+    "schema": {
+        "type": "object",
+        "title": "CodeReviewComments",
+        "additionalProperties": False,
+        "patternProperties": {
+            r".+:\\d+": {
+                "type": "string",
+                "description": "Feedback for the referenced line in the file."
+            }
+        }
+    },
+    "strict": True
+}
 
 
 class BitbucketApiService:
@@ -74,14 +91,42 @@ class ChatGPTApiService:
     def __init__(self, api_key, organization=None, *args, **kwargs):
         self.client = OpenAI(api_key=api_key, organization=organization, *args, **kwargs)
 
-    def create_completion(self, model, messages, **kwargs):
-        completion = self.client.chat.completions.create(
-            response_format={"type": "json_object"},
-            model=model,
-            messages=messages,
-            **kwargs
-        )
+    def _uses_structured_outputs(self, model: str) -> bool:
+        """
+        Conservative check: allow models that are known to support response_format.json_schema.
+        """
+        return any(k in model for k in [
+            "gpt-4o", "gpt-4o-mini", "gpt-4.1", "gpt-4.1-mini", "gpt-5"
+        ])
 
+    def _is_o1_family(self, model: str) -> bool:
+        return model.startswith("o1")
+
+    def create_completion(self, model, messages, **kwargs):
+        if self._is_o1_family(model):
+            # Avoid constructing OpenAI's BadRequestError directly (requires response/body).
+            # Raise a local, simple exception instead and handle it at the call site.
+            raise UnsupportedModelError("The selected 'o1' model does not support Structured Outputs or JSON mode directly for schema-enforced results. Use gpt-4o(-mini)/gpt-5 or implement a two-call chain.")
+
+        if self._uses_structured_outputs(model):
+            completion = self.client.chat.completions.create(
+                model=model,
+                messages=messages,
+                response_format={
+                    "type": "json_schema",
+                    "json_schema": STRUCTURED_OUTPUT_SCHEMA["schema"],
+                    "strict": True
+                },
+                **kwargs
+            )
+        else:
+            completion = self.client.chat.completions.create(
+                model=model,
+                messages=messages,
+                response_format={"type": "json_object"},
+                **kwargs
+            )
+        
         return completion
 
     @staticmethod
@@ -109,6 +154,10 @@ class ChatGPTApiService:
                     num_tokens += -1  # role is always required and always 1 token
         num_tokens += 2  # every reply is primed with <im_start>assistant
         return num_tokens
+
+
+class UnsupportedModelError(Exception):
+    pass
 
 
 class ChatGPTCodereviewPipe(Pipe):
@@ -210,7 +259,7 @@ class ChatGPTCodereviewPipe(Pipe):
         completion = None
         try:
             completion = self.chat_gpt_client.create_completion(**completion_params)
-        except BadRequestError as error:
+        except (BadRequestError, UnsupportedModelError) as error:
             self.fail(f"{str(error)}")
 
         end_time = time.time()
