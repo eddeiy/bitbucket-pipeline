@@ -132,8 +132,9 @@ class TestChatGPTApiService:
         _, kwargs = mock_create.call_args
         assert kwargs["model"].startswith('gpt-4o-mini')
         assert kwargs["response_format"]["type"] == "json_schema"
-        assert kwargs["response_format"]["json_schema"] == STRUCTURED_OUTPUT_SCHEMA["schema"]
-        assert kwargs["response_format"]["strict"] is True
+        assert kwargs["response_format"]["json_schema"]["name"] == STRUCTURED_OUTPUT_SCHEMA["name"]
+        assert kwargs["response_format"]["json_schema"]["schema"] == STRUCTURED_OUTPUT_SCHEMA["schema"]
+        assert kwargs["response_format"]["json_schema"]["strict"] is True
 
         # Ensure messages are passed through
         assert isinstance(kwargs["messages"], list)
