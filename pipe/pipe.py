@@ -43,12 +43,12 @@ STRUCTURED_OUTPUT_SCHEMA = {
     "schema": {
         "type": "object",
         "title": "CodeReviewComments",
-        "additionalProperties": False,
-        "patternProperties": {
-            r".+:\\d+": {
-                "type": "string",
-                "description": "Feedback for the referenced line in the file."
-            }
+        # OpenAI Structured Outputs currently require a properties field and
+        # do not support patternProperties. Allow arbitrary keys mapping to strings.
+        "properties": {},
+        "additionalProperties": {
+            "type": "string",
+            "description": "Feedback for the referenced line in the file."
         }
     },
     "strict": True
@@ -114,8 +114,11 @@ class ChatGPTApiService:
                 messages=messages,
                 response_format={
                     "type": "json_schema",
-                    "json_schema": STRUCTURED_OUTPUT_SCHEMA["schema"],
-                    "strict": True
+                    "json_schema": {
+                        "name": STRUCTURED_OUTPUT_SCHEMA["name"],
+                        "schema": STRUCTURED_OUTPUT_SCHEMA["schema"],
+                        "strict": True,
+                    },
                 },
                 **kwargs
             )
